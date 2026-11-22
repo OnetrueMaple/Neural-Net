@@ -1,5 +1,6 @@
+from random import randrange
+from math import isfinite
 from randomstuff import *
-import math
 from builder import *
 from activations import *
 from evaluators import basic
@@ -46,12 +47,25 @@ layers     = 0
 layerWidth = 0
 
 # Creating input values array for evaluation later.
-#'''
+#''' # Fill data range with random values.
 for i in range(numInputs):
-    value = 4.0#randrange(-100000, 100000) * 0.00001
+    value = -3.0#randrange(-100000, 100000) * 0.00001
     #while(value >= -0.00001 and value <= 0.00001):
     #    value = randrange(-100000, 100000) * 0.00001
     inputs.append(value)
+#'''
+
+#'''
+data_range = [] # Fill this with input sets that should be evaluated correctly by some function.
+
+# For y = 2x
+data_range = [[1], [2], [4], [-3], [-6], [16]]
+
+# For XOR(x, y)
+#data_range = [[0, 0], [0, 1], [1, 0], [1, 1]]
+
+# For y = x^2
+#data_range = [[0], [1], [-4], [5], [10], [2], [-1]]
 #'''
 
 ''' ------------------------------------------------------------------------------------------------------------------------------------------------------------------ '''
@@ -59,11 +73,11 @@ for i in range(numInputs):
 
 # Don't forget to redefine "actions" and "targets" inside your head. You were on something that felt important. Actions are a bridge between the mind and the world, or something. Restart there.
 action  = None       # Output node of the network for each evaluation pass. I'll eventually use output nodes to drive external interaction later, so "action" is actually very appropriate.
-target  = None       # "The Solution"! Really though the target is called that here because "it's the answer" to the input. There's... definitely more to explain here and I'm off somewhat. Later o/
+target  = None       # "The Solution"! Really though the target is called that here because it's the answer we have chosen for the input set.
 
-# I'm sticking with dense transformers rn. I strongly disagree with my decision but whatever.
+# I'm sticking with dense structures rn. I strongly disagree with my decision but whatever.
 buildDense(infomap, numInputs, numOutputs, layers, layerWidth)
-# In case I start losing my mind, v that will help me verify that my basic evaluator works.
+# In case I start wondering what's failing, the assignments below will help me verify that my basic evaluator works.
 #infomap.lookup[0].weights = {-1: 1.0}
 #infomap.lookup[0].bias    = 0.5
 
@@ -71,12 +85,20 @@ infomap.resetCurrents()
 choices = infomap.end # List of actions to choose from. An action is an endpoint in the network, the endpoints represent final reconstruction of input. Make sure it's clear!
 target  = 2 * inputs[0]#choices[randrange(0, (len(choices) - 1))] if len(choices) > 1 else choices[0] if len(choices) == 1 else None
 
-# Right now I'm trying to make sure that my descend function converges regardless of network structure. It fails with layers.
-print(f"{'\033[94m'}Initial network values are: Target={target}\n{printrawnetwork(infomap)}")
+# Right now I'm trying to make sure that my descend function converges regardless of network structure. It fails with layers and branches.
+print(f"{'\033[94m'}Initial network values are: Target={'\033[95m'}{target}{'\033[94m'}\n{printrawnetwork(infomap)}\n---------------------------------")
 evaluate()
+
+#for node in infomap.lookup:
+#    neuro[node].multipliers.append(randrange(-10, 10))
+#print(f"{'\033[94m'}Data after evaluation and multiplier reassignment:\n{printrawnetwork(infomap)}\n-----------------------------------------")
+
+#infomap.solver(action, target, network=infomap)
+#print(f"{'\033[94m'}Data after autodiff fixes multipliers:\n{printrawnetwork(infomap)}")
 
 loop = 1
 
+#'''
 while(True):
 
     # When choosing between outputs, descent needs to reinforce(?) good moves and weaken(?) bad moves...
@@ -89,7 +111,7 @@ while(True):
     print(f"---------------------------------------------")
 
     # Sometimes when I do my math wrong a weight/bias will blow up to infinity and break learning (and my cycler) completely. This is a stopping rule to break out any time that happens.
-    if( not math.isfinite(action.output) ):
+    if( not isfinite(action.output) ):
         loop = 999999
         print("Learning exploded!")
         break
@@ -104,6 +126,7 @@ while(True):
 
     #print(f"{'\033[94m'}Actual choice was: {action.id} with an output of {action.output:.5f}, Target choice was: {target}\nNetwork before descent:\n{printrawnetwork(neuro)}\n--------")
 
-print(f"{'\033[94m'}Finished after {'\033[92m'}{loop}{'\033[94m'} cycles! Network values are: Target={target}\n{printrawnetwork(infomap)}")
+print(f"{'\033[94m'}Finished after {'\033[92m'}{loop}{'\033[94m'} cycles! Network values are: Target={'\033[95m'}{target}{'\033[94m'}\n{printrawnetwork(infomap)}")
+#'''
 
 #printToDo()

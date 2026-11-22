@@ -62,7 +62,7 @@ def test_building():
     print(f"{'\033[94m'}Checking network fields, version 0.3{'\033[0m'}") # Hardcoded ver number because this test should be EXPLICITLY CLEAR what the test is comparing against.
     testN      = Network() # I'll operate on this node lookup to make sure the rest of the functions actually work as intended.
     nmap       = testN.lookup
-    expected   = {'version': 0.3, 'modelID': '', 'activation': None, "evaluator": None, "solver": None, 'lookup': {}, 'start': [], 'end': [], 'currents': [], 'currentDepth': 0, 'base_precision': -2, 'base_modifier': 0, 'precision': -2, 'learning_rate': 12}
+    expected   = {'version': 0.3, 'modelID': '', 'activation': None, "evaluator": None, "solver": None, 'lookup': {}, 'start': [], 'end': [], 'currents': [], 'currentDepth': 0, 'base_precision': -3, 'base_modifier': 0, 'precision': -2, 'learning_rate': 12}
     actual     = testN.__dict__
     differences= {}
     ignore     = {} # In case keys from expected are missing from actual, I can ignore specific keys to avoid the key error.

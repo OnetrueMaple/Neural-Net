@@ -35,7 +35,7 @@ class Network:
 
         # These values together could find an "optimal step amount" depending on how far an estimated solution is from the current position.
         #   If implemented right, this idea that a network can guess a solution *should* fix some of the large variety in solution computation.
-        self.base_precision     = -2                                       # This number corresponds to the decimal place where accuracy is checked.
+        self.base_precision     = -3                                       # This number corresponds to the decimal place where accuracy is checked.
         self.base_modifier      = 0                                        # This number nudges the accuracy check up or down.
         self.precision          = self.base_precision - self.base_modifier # Actual precision value, values represent decimal places. learning_rate value (12) set to work for 2pp by default.
         self.learning_rate      = 12                                       # How far the network should try to move away from the current position.
@@ -150,7 +150,7 @@ def findEnds(lookup):
 def printrawnetwork(network): # I should like to GRAPHICALLY see a network layout, actually. The text is fine if I don't care about ease of use, but text output really sucks to sort through.
     whitespace = 15
     data  = network.__dict__
-    strin = ""
+    strin = "\033[97m"
     for key in data:
         if(key == 'lookup'):
             ids = []
@@ -164,7 +164,7 @@ def printrawnetwork(network): # I should like to GRAPHICALLY see a network layou
             strin += f"{temp}= {data[key]}\n"
     for node in network.lookup:
         strin += f"node_data={neuron_format(network.lookup[node])}\n"
-    print(strin[:-1])
+    return f"{strin[:-1]}{'\033[94m'}"
 
 def map_attributes(obj): # This function is used for saving a network object.
 

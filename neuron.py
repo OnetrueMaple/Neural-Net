@@ -28,7 +28,7 @@ def neuron_format(obj): # I want this to have configurable precision. Hardware d
         data["output"]  = float( f"{obj.output:.5f}" )
         data["weights"] = obj.weights
         data["bias"]    = float( f"{obj.bias:.5f}" )
-        #data["multis"]  = obj.multiplier
+        #data["multis"]  = obj.multipliers # This datapoint is for verifying solver functionalities
         return data
     raise TypeError(f'Cannot serialize object of {type(obj)}')
 
